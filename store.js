@@ -30,8 +30,16 @@ function addItemToBox(title, imageSrc, price) {
   cartRow.classList.add("cart-row"); //olusturdugumuz div elemanina class.List ile class ismi verdik
   let sentCartItems =
     document.getElementsByClassName("cart-items")[0];
-
-  let cartRowContent = ` <div class="cart-item cart-column">
+  // let itemNames = sentCartItems.getElementsByClassName(
+  //   "cart-item-title"
+  // );
+  // for (let index = 0; index < itemNames.length; index++) {
+  //   if ((itemNames[index].innerText = title)) {
+  //     alert("Bu ürünü zaten sectiniz!");
+  //     return;
+  //   }
+  // }
+  let cartRowContent = ` <div class="cart-item cart-column">  
     <img class="cart-item-image" src="${imageSrc}" width="100" height="100">
     <span class="cart-item-title">${title}</span>
       </div>
@@ -43,4 +51,40 @@ function addItemToBox(title, imageSrc, price) {
   `;
   cartRow.innerHTML = cartRowContent; //olusturdugumuz kod blogunu inner.html ile cartRow a ekledik.
   sentCartItems.append(cartRow); //append ile sentCartItems in icine cartRow dan gelen bilgiyi ekledik.
+}
+
+let deleteButton =
+  document.getElementsByClassName("btn-danger");
+for (let index = 0; index < deleteButton.length; index++) {
+  let button = deleteButton[index];
+  button.addEventListener("click", removeBoxItem);
+}
+function removeBoxItem(event) {
+  let buttonClick = event.target;
+  buttonClick.parentElement.parentElement.remove();
+  totalBoxUpdate();
+}
+
+function totalBoxUpdate() {
+  let cartItemContainer =
+    document.getElementsByClassName("cart-items")[0];
+  let cartRows =
+    cartItemContainer.getElementsByClassName("cart-row");
+  let total = 0;
+  for (let index = 0; index < cartRows.length; index++) {
+    let cartRow = cartRows[index];
+    let priceElement =
+      cartRow.getElementsByClassName("cart-price")[0];
+    let quantityElement = cartRow.getElementsByClassName(
+      "cart-quantity-input"
+    )[0];
+    let price = parseFloat(
+      priceElement.innerText.replace("$", "")
+    );
+    let quantity = quantityElement.value;
+    total = total + price * quantity;
+  }
+  document.getElementsByClassName(
+    "cart-total-price"
+  )[0].innerText = total;
 }
